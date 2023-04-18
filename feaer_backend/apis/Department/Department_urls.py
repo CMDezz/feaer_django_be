@@ -1,6 +1,7 @@
 from django.urls import path
-from feaer_backend.apis.Department.Department_apis import getAllDepartment
+from feaer_backend.apis.Department import Department_apis
 
 urlpatterns = [
-    path('/',getAllDepartment),
+    path('',Department_apis.getAllDepartment),
+    path('createDepartment',Department_apis.createDepartment),
 ]
