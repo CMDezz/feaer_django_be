@@ -2,7 +2,7 @@ from djongo import models
 from django import forms
 from django.db import models as modelDjango
 import uuid
-
+from .common.Fields import MyJSONField
 # from bson import ObjectId
 
 # class DjongoModelChoiceField(forms.ModelChoiceField):
@@ -74,17 +74,14 @@ class Product(models.Model):
     Desc = models.TextField()
     Price = models.IntegerField()
     FinalPrice = models.IntegerField()
-    Sex = models.ForeignKey('Sex',on_delete=models.CASCADE)
-    Category = models.ManyToManyField(Category)
-    # Category = models.ArrayField(model_container=Category)
-    # Category = models.ArrayField(model_container=Category)
-    # Collection = models.ManyToManyField(Collection)
-    SizeAndStock = models.JSONField(blank=True)
-    Image=models.JSONField(blank=True)
-    ImageDetail=models.JSONField(blank=True)
-    Discount=models.ForeignKey('Discount',on_delete=models.CASCADE)
-    TotalSold=models.IntegerField()
-    # Tag = models.ArrayField(model_container=Tag)
-    # Tag = models.ManyToManyField(Tag)
+    Sex = models.ForeignKey('Sex',on_delete=models.CASCADE,null=False, blank=False)
+    Category = models.ArrayReferenceField(Category,on_delete=models.CASCADE)
+    Collection = models.ArrayReferenceField(Collection,on_delete=models.CASCADE)
+    SizeAndStock = MyJSONField(blank=True,null=True,default={'X':1})
+    # Image=models.JSONField(blank=True)
+    # ImageDetail=models.JSONField(blank=True)
+    Discount=models.ForeignKey('Discount',on_delete=models.CASCADE,null=True, blank=True)
+    TotalSold=models.IntegerField(default=0)
+    Tag = models.ArrayReferenceField(Tag,on_delete=models.CASCADE,null=True, blank=True)
     def __str__(self):
         return self.Name
