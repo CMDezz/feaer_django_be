@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Departments,Employees,Product,Category,Collection,Tag,Sex,Discount
+from .models import Product,Category,Collection,Tag,Sex,Discount
 from bson import ObjectId
 import itertools
 from .common.Fields import MyJSONField
@@ -8,21 +8,13 @@ from jsoneditor.forms import JSONEditor
 
 # Register your models here.
 
-admin.site.register(Departments)
 admin.site.register(Category)
 admin.site.register(Collection)
 admin.site.register(Tag)
-admin.site.register(Sex)
 admin.site.register(Discount)
-
-@admin.register(Employees)
-class EmployeesAdmin(admin.ModelAdmin):
-    def get_form(self, request, obj=None, **kwargs):
-        data = request.POST.copy()
-        if request.POST:
-            ForeignKeyToObjectId('Department',data)
-        return super().get_form(request, obj=obj, **kwargs)
-
+@admin.register(Sex)
+class SexAdmin(admin.ModelAdmin):
+    list_display = ('_id', 'Name')
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     formfield_overrides = {

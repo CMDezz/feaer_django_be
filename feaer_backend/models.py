@@ -10,22 +10,6 @@ from .common.Fields import MyJSONField
 #         return self.queryset.get(_id=ObjectId(value))
 
 # Create your models here.
-class Departments(models.Model):
-    _id = models.ObjectIdField()
-    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    DepartmentName = models.CharField(max_length=250)
-    def __str__(self):
-        return self.DepartmentName
-
-class Employees(models.Model):
-    _id = models.ObjectIdField()
-    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    EmployeetName = models.CharField(max_length=250)
-    Department = models.ForeignKey('Departments',on_delete=models.CASCADE,db_column='departments')
-    DateOfJoining = models.DateField()
-    PhotoFileName = models.CharField(max_length=250)
-    def __str__(self):
-        return self.EmployeetName
 
 #CATEGORY 
 class Category(models.Model):
@@ -77,9 +61,9 @@ class Product(models.Model):
     Sex = models.ForeignKey('Sex',on_delete=models.CASCADE,null=False, blank=False)
     Category = models.ArrayReferenceField(Category,on_delete=models.CASCADE)
     Collection = models.ArrayReferenceField(Collection,on_delete=models.CASCADE)
-    SizeAndStock = MyJSONField(blank=True,null=True,default={'X':1})
-    # Image=models.JSONField(blank=True)
-    # ImageDetail=models.JSONField(blank=True)
+    SizeAndStock = MyJSONField(default={},null=True,blank=True)
+    Image=MyJSONField(default=[],null=True,blank=True)
+    ImageDetail=MyJSONField(default=[],null=True,blank=True)
     Discount=models.ForeignKey('Discount',on_delete=models.CASCADE,null=True, blank=True)
     TotalSold=models.IntegerField(default=0)
     Tag = models.ArrayReferenceField(Tag,on_delete=models.CASCADE,null=True, blank=True)
