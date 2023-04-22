@@ -58,14 +58,18 @@ class Product(models.Model):
     Desc = models.TextField()
     Price = models.IntegerField()
     FinalPrice = models.IntegerField()
-    Sex = models.ForeignKey('Sex',on_delete=models.CASCADE,null=False, blank=False)
-    Category = models.ArrayReferenceField(Category,on_delete=models.CASCADE)
-    Collection = models.ArrayReferenceField(Collection,on_delete=models.CASCADE)
+    Sex = models.ForeignKey('Sex',on_delete=models.CASCADE,null=False, blank=False,db_column='Sex')
+    Category = models.ArrayReferenceField(Category,on_delete=models.CASCADE,db_column='Category')
+    Collection = models.ArrayReferenceField(Collection,on_delete=models.CASCADE,db_column='Collection')
     SizeAndStock = MyJSONField(default={},null=True,blank=True)
     Image=MyJSONField(default=[],null=True,blank=True)
     ImageDetail=MyJSONField(default=[],null=True,blank=True)
-    Discount=models.ForeignKey('Discount',on_delete=models.CASCADE,null=True, blank=True)
+    Discount=models.ForeignKey('Discount',on_delete=models.CASCADE,null=True, blank=True,db_column='Discount')
     TotalSold=models.IntegerField(default=0)
-    Tag = models.ArrayReferenceField(Tag,on_delete=models.CASCADE,null=True, blank=True)
+    Tag = models.ArrayReferenceField(Tag,on_delete=models.CASCADE,null=True, blank=True,db_column='Tag')
+    updatedAt = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        get_latest_by = 'updatedAt'
+
     def __str__(self):
         return self.Name

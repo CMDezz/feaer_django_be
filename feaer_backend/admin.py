@@ -8,13 +8,19 @@ from jsoneditor.forms import JSONEditor
 
 # Register your models here.
 
-admin.site.register(Category)
+# admin.site.register(Category)
 admin.site.register(Collection)
 admin.site.register(Tag)
 admin.site.register(Discount)
+
 @admin.register(Sex)
 class SexAdmin(admin.ModelAdmin):
-    list_display = ('_id', 'Name')
+    list_display = ('Name','_id')
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('Name','_id')
+    
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -29,6 +35,7 @@ class ProductAdmin(admin.ModelAdmin):
             ArrayReferenceFieldToObjectId('Category',data)
             ArrayReferenceFieldToObjectId('Tag',data)
             ArrayReferenceFieldToObjectId('Collection',data)
+            print('data ',data)
             # StringToJSONField('SizeAndStock',data)
             request.POST = data
         return super().get_form(request, obj=obj, **kwargs)
