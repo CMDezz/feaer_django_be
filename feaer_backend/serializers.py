@@ -2,6 +2,7 @@ from rest_framework import serializers
 from feaer_backend.models import Category,Collection,Sex,Tag,Product,Discount
 from bson import ObjectId
 from bson.errors import InvalidId
+import json
 class ObjectIdSerializer(serializers.Field):
     def to_representation(self, value):
         print('-----------------------------------value ',value)
@@ -59,8 +60,16 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model=Tag
         fields=('__all__')
-        extra_kwargs = {'_id': {'required': False}}
+        extra_kwargs = {'_id': {'required': False}
+                        }
+class JSONListField(serializers.ListField):
+    def to_representation(self, value):
+        return super().to_representation(value)
 
+class JSONDictField(serializers.DictField):
+    def to_representation(self, value):
+        return super().to_representation(value)
+    
 class ProductSerializer(serializers.ModelSerializer):
     _id = ObjectIdSerializer(required=False)
     # Sex = ObjectIdSerializer()
@@ -69,6 +78,9 @@ class ProductSerializer(serializers.ModelSerializer):
     Tag = serializers.SerializerMethodField()
     Discount = DiscountSerializer()
     Sex = SexSerializer()
+    Image = JSONListField()
+    ImageDetail = JSONListField()
+    SizeAndStock = JSONDictField()
 
     def get_Category(self, obj):
         ids = obj.Category.values_list('_id', flat=True)
@@ -84,3 +96,5 @@ class ProductSerializer(serializers.ModelSerializer):
         model=Product
         fields=('__all__')
         extra_kwargs = {'_id': {'required': False}}
+
+

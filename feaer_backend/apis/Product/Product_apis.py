@@ -52,10 +52,13 @@ def edit(req):
     return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def getProductById(req,id):
+def getProductById(req):
+    id = req.GET.get('id')  
+    print('id ne ',id)
     data = Product.objects.filter(_id=ObjectId(id))
     data_serializer = ProductSerializer(data,many=True)
-    return Response(data_serializer.data,status=status.HTTP_200_OK)
+    print('data_serializer ',data_serializer.data)
+    return Response(data_serializer.data[0],status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def getLatestProducts(req):
@@ -64,14 +67,16 @@ def getLatestProducts(req):
     return Response(data_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def getProductsByCategory(req, name):
+def getProductsByCategory(req):
+    name = req.GET.get('category')
     category = Category.objects.get(Name=name).pk
     data = Product.objects.filter(Category=category)
     data_serializer = ProductSerializer(data, many=True)
     return Response(data_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def getProductsByCategoryId(req, id):
+def getProductsByCategoryId(req):
+    id = req.GET.get('id')
     data = Product.objects.filter(Category=ObjectId(id))
     data_serializer = ProductSerializer(data, many=True)
     return Response(data_serializer.data, status=status.HTTP_200_OK)
@@ -83,41 +88,49 @@ def getTopSellerProducts(req):
     return Response(data_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def getProductsByTag(req, name):
+def getProductsByTag(req):
+    name = req.GET.get('tag')
+    print('tag ne ',name)
     tag = Tag.objects.get(Name=name).pk
-    data = Product.objects.filter(Category=tag)
+    print('tag ne ',tag)
+    data = Product.objects.filter(Tag=tag)
     data_serializer = ProductSerializer(data, many=True)
     return Response(data_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def getProductsByTagId(req, id):
+def getProductsByTagId(req):
+    id = req.GET.get('id')
     data = Product.objects.filter(Tag=ObjectId(id))
     print('dataa ',data)
     data_serializer = ProductSerializer(data, many=True)
     return Response(data_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def getProductsByName(req, name):
-    data = Product.objects.filter(Name=name)
+def getProductsByName(req):
+    name = req.GET.get('keyword')
+    data = Product.objects.filter(Name__icontains=name)
     data_serializer = ProductSerializer(data, many=True)
     return Response(data_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def getProductsByDiscount(req, name):
+def getProductsByDiscount(req):
+    name = req.GET.get('discount')
     discount = Discount.objects.get(Name=name).pk
     data = Product.objects.filter(Discount=discount)
     data_serializer = ProductSerializer(data, many=True)
     return Response(data_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def getProductsByCollection(req, name):
+def getProductsByCollection(req):
+    name = req.GET.get('name')
     collection = Collection.objects.get(Name=name).pk
     data = Product.objects.filter(Collection=collection)
     data_serializer = ProductSerializer(data, many=True)
     return Response(data_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def getProductsBySex(req, name):
+def getProductsBySex(req):
+    name = req.GET.get('sex')
     sex = Sex.objects.get(Name=name).pk
     data = Product.objects.filter(Collection=sex)
     data_serializer = ProductSerializer(data, many=True)
