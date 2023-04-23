@@ -9,6 +9,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.contrib.auth import authenticate, login,logout
 from feaer_backend.common.validateToken import validate_token
 from bson import ObjectId
+from datetime import datetime, timedelta
 
 @api_view(['GET'])
 @validate_token
@@ -52,6 +53,7 @@ def SignIn(req):
 
 @api_view(['POST'])
 def SignOut(req):
+    invalidate_token(req)
     logout(req)
     return Response({"message": "Logout successful"}, status=status.HTTP_200_OK)
 
@@ -86,3 +88,29 @@ def edit(req):
         return Response(data_serializer.data)
     return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+@validate_token
+def getUserInfo(req):
+    id = req.GET.get('id')  
+    print('id ne ',id)
+    data = User.objects.filter(_id=ObjectId(id))
+    data_serializer = UserSerializer(data,many=True)
+    print('data_serializer ',data_serializer.data)
+    return Response(data_serializer.data[0],status=status.HTTP_200_OK)
+
+
+def invalidate_token(request):
+    auth_header = request.headers.get('Authorization')
+    print('auth_header ',auth_header)
+    if auth_header:
+        token = auth_header.split(' ')[1]
+        print('auth_header token',AuthToken.objects.get(token_key=token[:8]))
+        try:
+            auth_token = AuthToken.objects.get(token_key=token[:8])
+            auth_token.delete()
+            return True
+        except AuthToken.DoesNotExist:
+            return False
+    else:
+        return False

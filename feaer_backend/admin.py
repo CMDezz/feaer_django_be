@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product,Category,Collection,Tag,Sex,Discount,User
+from .models import Product,Category,Collection,Tag,Sex,Discount,User,Contact
 from bson import ObjectId
 import itertools
 from .common.Fields import MyJSONField
@@ -10,12 +10,17 @@ from jsoneditor.forms import JSONEditor
 
 # admin.site.register(Category)
 admin.site.register(Collection)
+# admin.site.register(Contact)
 admin.site.register(Tag)
 admin.site.register(Discount)
 
 @admin.register(Sex)
 class SexAdmin(admin.ModelAdmin):
     list_display = ('Name','_id')
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('Name','Subject','_id')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

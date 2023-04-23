@@ -8,4 +8,8 @@ urlpatterns = [
     path('editUser',User_apis.edit),
     path('signIn',User_apis.SignIn),
     path('signOut',User_apis.SignOut),
+
+    #get thong tin user
+    path('getUserInfo',User_apis.getUserInfo),
+
 ]

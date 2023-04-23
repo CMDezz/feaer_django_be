@@ -6,9 +6,10 @@ from knox.auth import TokenAuthentication
 def validate_token(func):
     def wrapper(request, *args, **kwargs):
         try:
-            print('token ne 0')
+
             token = TokenAuthentication().authenticate(request)
-            print('token ne ',token)
+            if (token == None):
+                return Response({"error": "Invalid Token"}, status=status.HTTP_401_UNAUTHORIZED)
             return func(request, *args, **kwargs)
         except:
             return Response({"error": "Invalid Token"}, status=status.HTTP_401_UNAUTHORIZED)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from feaer_backend.models import Category,Collection,User,Order,Sex,Tag,Product,Discount
+from feaer_backend.models import Category,Collection,Contact,User,Order,Sex,Tag,Product,Discount
 from bson import ObjectId
 from bson.errors import InvalidId
 import json
@@ -125,3 +125,9 @@ class OrderSerializer(serializers.ModelSerializer):
         extra_kwargs = {'_id': {'required': False}}
       
 
+class ContactSerializer(serializers.ModelSerializer):
+    _id = ObjectIdSerializer(required=False)
+    class Meta:
+        model=Contact
+        fields=('__all__')
+        extra_kwargs = {'_id': {'required': False}}

@@ -117,6 +117,9 @@ class User(AbstractBaseUser):
     Mail = models.EmailField(max_length=250,unique=True)
     Password = models.CharField(max_length=250)
     Order = models.ArrayReferenceField(Order,on_delete=models.CASCADE,null=True, blank=True,db_column='Order')
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     USERNAME_FIELD = 'Mail'
     REQUIRED_FIELDS = ['Password']
 
@@ -125,3 +128,16 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.Mail
 
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+#Contact
+class Contact(models.Model):
+    _id = models.ObjectIdField()
+    Name = models.CharField(max_length=150)
+    Mail=models.EmailField(max_length=250,blank=True,null=True,unique=True)
+    Subject = models.TextField()
+    Desc = models.TextField()
