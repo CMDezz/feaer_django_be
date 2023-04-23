@@ -6,4 +6,5 @@ urlpatterns = [
     path('collection/',include('feaer_backend.apis.Collection.Collection_urls')),
     path('category/',include('feaer_backend.apis.Category.Category_urls')),
     path('product/',include('feaer_backend.apis.Product.Product_urls')),
+    path('user/',include('feaer_backend.apis.User.User_urls')),
 ]

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product,Category,Collection,Tag,Sex,Discount
+from .models import Product,Category,Collection,Tag,Sex,Discount,User
 from bson import ObjectId
 import itertools
 from .common.Fields import MyJSONField
@@ -36,6 +36,17 @@ class ProductAdmin(admin.ModelAdmin):
             ArrayReferenceFieldToObjectId('Tag',data)
             ArrayReferenceFieldToObjectId('Collection',data)
             print('data ',data)
+            # StringToJSONField('SizeAndStock',data)
+            request.POST = data
+        return super().get_form(request, obj=obj, **kwargs)
+
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    def get_form(self, request, obj=None, **kwargs):
+        data = request.POST.copy()
+        if request.POST:
+            # ArrayReferenceFieldToObjectId('Order',data)
             # StringToJSONField('SizeAndStock',data)
             request.POST = data
         return super().get_form(request, obj=obj, **kwargs)

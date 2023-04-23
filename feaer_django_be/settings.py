@@ -40,11 +40,20 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'feaer_backend',
-    'jsoneditor'
+    'jsoneditor',
+    'knox'
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'knox.auth.TokenAuthentication',
+    ]
+}
+
 JSON_EDITOR_JS = 'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/8.6.4/jsoneditor.js'
 JSON_EDITOR_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/8.6.4/jsoneditor.css'
-
+AUTH_USER_MODEL = 'feaer_backend.User'
 CORS_ORIGIN_ALLOW_ALL= True
 
 MIDDLEWARE = [

@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from feaer_backend.models import Category,Collection,Sex,Tag,Product,Discount
+from feaer_backend.models import Category,Collection,User,Order,Sex,Tag,Product,Discount
 from bson import ObjectId
 from bson.errors import InvalidId
 import json
+
 class ObjectIdSerializer(serializers.Field):
     def to_representation(self, value):
-        print('-----------------------------------value ',value)
         if not ObjectId.is_valid(value):  # User submitted ID's might not be properly structured
             raise InvalidId
         return str(value)
@@ -97,4 +97,31 @@ class ProductSerializer(serializers.ModelSerializer):
         fields=('__all__')
         extra_kwargs = {'_id': {'required': False}}
 
+
+class UserSerializer(serializers.ModelSerializer):
+    _id = ObjectIdSerializer(required=False)
+    # Order = serializers.SerializerMethodField()
+    # Mail = serializers.EmailField(required=True)
+    Password = serializers.CharField(write_only=True, required=True)
+    def create(self, validated_data):
+        user = User.objects.create_user(validated_data['Mail'], validated_data['Password'])
+        print('=====user sau khi tao ',user)
+        return user
+
+    class Meta:
+        model=User
+        fields=('__all__')
+        extra_kwargs = {'_id': {'required': False},'password':{'required':False}}
+
+ 
+
+class OrderSerializer(serializers.ModelSerializer):
+    _id = ObjectIdSerializer(required=False)
+    Sex = UserSerializer()
+    
+    class Meta:
+        model=Tag
+        fields=('__all__')
+        extra_kwargs = {'_id': {'required': False}}
+      
 
