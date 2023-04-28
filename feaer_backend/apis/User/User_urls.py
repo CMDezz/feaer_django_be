@@ -7,6 +7,7 @@ urlpatterns = [
     path('deleteUser',User_apis.deleteOne),
     path('editUser',User_apis.edit),
     path('signIn',User_apis.SignIn),
+    path('signInAdmin',User_apis.SignInAdmin),
     path('signOut',User_apis.SignOut),
 
     #get thong tin user

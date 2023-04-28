@@ -52,6 +52,25 @@ def SignIn(req):
         }, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
+def SignInAdmin(req):
+    Mail = req.data.get('Mail')
+    Password = req.data.get('Password')
+    user = authenticate(req, username=Mail, password=Password)
+    if user is not None:
+        if not user.is_superuser:
+            Response({"message":'Không đủ quyền truy cập!'},status=status.HTTP_401_UNAUTHORIZED)
+        login(req, user)
+        auth_token = AuthToken.objects.create(user=user)
+        return Response({
+                "User": UserSerializer(user).data,
+                "Token": auth_token[1]
+        }, status=status.HTTP_200_OK)
+    else:
+        return Response({
+            "message": "Thông tin đăng nhập không chính xác"
+        }, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['POST'])
 def SignOut(req):
     invalidate_token(req)
     logout(req)
