@@ -91,13 +91,13 @@ class ChatConsumer(AsyncConsumer):
             }
         )
 
-        await self.channel_layer.group_send(
-            'chat_admin',
-            {
-                'type': 'chat_message',
-                'text': json.dumps(response)
-            }
-        )
+        # await self.channel_layer.group_send(
+        #     'chat_admin',
+        #     {
+        #         'type': 'chat_message',
+        #         'text': json.dumps(response)
+        #     }
+        # )
         print('----- send mess end')
 
         # user =''
