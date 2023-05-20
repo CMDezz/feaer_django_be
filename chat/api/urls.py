@@ -2,7 +2,7 @@ from django.urls import path
 from chat import views
 from .views import (
     getThreads,
-    createThreads
+    createThreads,
 )
 urlpatterns = [
     path("adminChat/", views.index, name="index"),
