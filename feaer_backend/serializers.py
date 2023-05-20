@@ -54,7 +54,12 @@ class SexSerializer(serializers.ModelSerializer):
         model=Sex
         fields=('__all__')
         extra_kwargs = {'_id': {'required': False}}
+    def to_internal_value(self, data):
+        if isinstance(data, dict) and '_id' in data:
+            return {'_id': data['_id']}
 
+        return super().to_internal_value(data)
+        
 class TagSerializer(serializers.ModelSerializer):
     _id = ObjectIdSerializer(required=False)
     class Meta:
@@ -76,10 +81,10 @@ class ProductSerializer(serializers.ModelSerializer):
     Category = serializers.SerializerMethodField()
     Collection = serializers.SerializerMethodField()
     Tag = serializers.SerializerMethodField()
-    Discount = DiscountSerializer()
+    Discount = DiscountSerializer(required=False)
     Sex = SexSerializer()
     Image = JSONListField()
-    ImageDetail = JSONListField()
+    ImageDetail = JSONListField(required=False)
     SizeAndStock = JSONDictField()
 
     def get_Category(self, obj):
@@ -91,6 +96,31 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_Collection(self, obj):
         ids = obj.Collection.values_list('_id', flat=True)
         return [str(id) for id in ids]
+
+    def update(self, instance, validated_data):
+        # Update the foreign key field (Sex)
+        sex_id_data = validated_data.pop('Sex', None)
+        if sex_id_data is not None and '_id' in sex_id_data:
+            sex_id = str(sex_id_data['_id'])
+            instance.Sex_id = ObjectId(sex_id)
+
+        # Update other fields
+        for attr, value in validated_data.items():
+            print('attr ',attr,'- ',value)
+            setattr(instance, attr, value)
+
+        # Save the updated instance
+        instance.save()
+
+        return instance
+
+    def create(self, validated_data):
+        sex_id_data = validated_data.pop('Sex', {}).get('_id', None)
+        if sex_id_data:
+            sex_id = str(sex_id_data)
+            validated_data['Sex_id'] = ObjectId(sex_id)
+
+        return super().create(validated_data)
 
     class Meta:
         model=Product

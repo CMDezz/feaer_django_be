@@ -22,13 +22,14 @@ def create(req):
 
 @api_view(['DELETE'])
 def deleteOne(req):
-    if ('id' not in req.data):
+    id = req.query_params.get('id')
+    if ('id' is None):
         return Response('Missing id',status=status.HTTP_400_BAD_REQUEST)
-    
-    if not (ObjectId.is_valid(req.data['id'])):
+    print('id ne ',id)
+    if not (ObjectId.is_valid(id)):
         return Response('Id is not valid',status=status.HTTP_400_BAD_REQUEST)
     
-    data = Product.objects.filter(_id = ObjectId(req.data['id'])).delete()
+    data = Product.objects.filter(_id = ObjectId(id)).delete()
     if (data[0] == 0):
         return Response('Thao tác thất bại',status=status.HTTP_200_OK)
     return Response('Thao tác thành công',status=status.HTTP_200_OK)
@@ -90,9 +91,7 @@ def getTopSellerProducts(req):
 @api_view(['GET'])
 def getProductsByTag(req):
     name = req.GET.get('tag')
-    print('tag ne ',name)
     tag = Tag.objects.get(Name=name).pk
-    print('tag ne ',tag)
     data = Product.objects.filter(Tag=tag)
     data_serializer = ProductSerializer(data, many=True)
     return Response(data_serializer.data, status=status.HTTP_200_OK)
