@@ -22,6 +22,24 @@ def getThreads(req):
         ).values(
            '_id', 'first_person', 'second_person', 'updated', 'timestamp', 'isActive'
         )
+        if len(data) == 0:
+            # tạo thread nếu empty
+            id_admin = User.objects.get(Mail='admin@gmail.com')
+            # lấy id của user
+            id_user = User.objects.get(pk = ObjectId(req.GET['id']))
+            data_coppy = req.data.copy()
+            data_coppy['first_person'] = id_user
+            data_coppy['second_person'] = id_admin
+            print('data_coppy ',data_coppy)
+            data_serializer = ThreadSerializer(data=data_coppy)
+            if data_serializer.is_valid():
+                data_serializer.save()
+                data = Thread.objects.filter(
+                    Q(first_person=ObjectId(id_user)) | Q(second_person=ObjectId(id_user)),
+                    isActive__in=[True],
+                ).values(
+                '_id', 'first_person', 'second_person', 'updated', 'timestamp', 'isActive'
+                )
         dataValue = list(data)            
         data_serializer = ThreadSerializer(data=dataValue,many=True)
         if (data_serializer.is_valid()):
