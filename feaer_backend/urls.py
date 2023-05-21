@@ -7,5 +7,6 @@ urlpatterns = [
     path('contact/',include('feaer_backend.apis.Contact.Contact_urls')),
     path('category/',include('feaer_backend.apis.Category.Category_urls')),
     path('product/',include('feaer_backend.apis.Product.Product_urls')),
+    path('order/',include('feaer_backend.apis.Order.Order_urls')),
     path('user/',include('feaer_backend.apis.User.User_urls')),
 ]

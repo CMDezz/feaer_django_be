@@ -76,30 +76,30 @@ class ChatConsumer(AsyncConsumer):
             'time': str(datetime.now())
         }
         if (self.chat_room != 'chat_admin'):
-            # await self.channel_layer.group_send(
-            #     other_user_chat_room,
-            #     {
-            #         'type': 'chat_message',
-            #         'text': json.dumps(response)
-            #     }
-            # )
-            # await self.channel_layer.group_send(
-            #     self.chat_room,
-            #     {
-            #         'type': 'chat_message',
-            #         'text': json.dumps(response)
-            #     }
-            # )
-            
-            admin_response = response.copy()
-            admin_response['isTotalSocket'] = True
             await self.channel_layer.group_send(
-                'chat_admin',
+                other_user_chat_room,
                 {
                     'type': 'chat_message',
-                    'text': json.dumps(admin_response)
+                    'text': json.dumps(response)
                 }
             )
+            await self.channel_layer.group_send(
+                self.chat_room,
+                {
+                    'type': 'chat_message',
+                    'text': json.dumps(response)
+                }
+            )
+            
+            # admin_response = response.copy()
+            # admin_response['isTotalSocket'] = True
+            # await self.channel_layer.group_send(
+            #     'chat_admin',
+            #     {
+            #         'type': 'chat_message',
+            #         'text': json.dumps(admin_response)
+            #     }
+            # )
         # else:
             # await self.channel_layer.group_send(
             #     'chat_admin',

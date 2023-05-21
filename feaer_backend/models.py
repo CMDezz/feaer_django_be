@@ -79,13 +79,26 @@ class Product(models.Model):
     def __str__(self):
         return self.Name
 
+
+
 #User
 class Order(models.Model):
     _id = models.ObjectIdField()
-    UserId=models.ForeignKey('User',on_delete=models.CASCADE,null=True, blank=True,db_column='Discount')
-
+    # UserId=models.ForeignKey('User',on_delete=models.CASCADE,null=True, blank=True,db_column='Discount')
+    Products=MyJSONField(default=[],null=True,blank=True)
+    Email=models.CharField(max_length=100)
+    Phone=models.CharField(max_length=100)
+    LastName=models.CharField(max_length=100)
+    FirstName=models.CharField(max_length=100)
+    City=models.CharField(max_length=100)
+    Ward=models.CharField(max_length=100)
+    District=models.CharField(max_length=100)
+    Address=models.CharField(max_length=100)
+    Note=models.CharField(max_length=100,null=True,blank=True)
+    updatedAt = models.DateTimeField(auto_now_add=True)
+    TotalPrice=models.IntegerField()
     def __str__(self):
-        return self.Name
+        return self.Email
     
 
 class MyUserManager(BaseUserManager):

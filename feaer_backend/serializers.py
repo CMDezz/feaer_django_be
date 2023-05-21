@@ -59,7 +59,7 @@ class SexSerializer(serializers.ModelSerializer):
             return {'_id': data['_id']}
 
         return super().to_internal_value(data)
-        
+
 class TagSerializer(serializers.ModelSerializer):
     _id = ObjectIdSerializer(required=False)
     class Meta:
@@ -147,10 +147,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     _id = ObjectIdSerializer(required=False)
-    Sex = UserSerializer()
-    
     class Meta:
-        model=Tag
+        model=Order
         fields=('__all__')
         extra_kwargs = {'_id': {'required': False}}
       

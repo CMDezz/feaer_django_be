@@ -58,7 +58,7 @@ def SignInAdmin(req):
     user = authenticate(req, username=Mail, password=Password)
     if user is not None:
         if not user.is_superuser:
-            Response({"message":'Không đủ quyền truy cập!'},status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"message":'Không đủ quyền truy cập!'},status=status.HTTP_401_UNAUTHORIZED)
         login(req, user)
         auth_token = AuthToken.objects.create(user=user)
         return Response({
